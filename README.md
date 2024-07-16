@@ -1,27 +1,52 @@
-# Input
+Different way of component communication
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.8.
+1. Parent to child communication
+2. Child to parent communication
+3. Sibling component communication
 
-## Development server
+After creating child component we are giving selector of child component (child component name is child) in app.component.html, hence child component is the child of parent  component ( i.e. parent component is app.component.html) shown below
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+app.component.html
 
-## Code scaffolding
+<app-child></app-child>
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+From app.component.hmtl ( i.e parent component) we want to pass data to the 'child' component, for that we use the decorator @Input()
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+app.component.ts
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+export class AppComponent {
+  titleValue:any;
+  parentTitle:any;
+  passValue(value:any){
+    this.parentTitle = value;
+  }
+}
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+app.component.hmtl
 
-## Further help
+<input type="text" [(ngModel)]="titleValue"/>
+<button (click)="passValue(titleValue)">Pass Data</button>
+<app-child [title]="parentTitle"></app-child>
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+child.component.ts
+
+export class ChildComponent {
+@Input() title:any;
+}
+
+
+child component.html
+
+
+<p>child works! - {{title}}</p>
+
+
+
+
+Whenever parentTitle in  <app-child [title]="parentTitle"></app-child> gets updated the title gets the updated value and that passes to child component, Child.component.ts file will receive the value from psrent in title in  @Input() title:any
+Whenever the component has @Input decorator then only we can use ngOnChanges() . The child component has @Input decorator in its ts file.
+ngOnChanges are used when parent component passes data to child component and in the child.component.ts when we receive the value and we want to manipulate the value obtained in @Input ( here 'title' ) then we use ngOnChanges (in the child component ts file) .
