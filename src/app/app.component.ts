@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'input';
+  titleValue:any;
+  parentTitle:any;
+  constructor(){
+   
+  }
+  passValue(value:any){
+    this.parentTitle = value;
+  }
 }
